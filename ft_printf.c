@@ -6,71 +6,84 @@
 /*   By: mkardes <mkardes@student.42kocaeli.com.tr  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 11:06:49 by mkardes           #+#    #+#             */
-/*   Updated: 2022/02/22 11:12:49 by mkardes          ###   ########.fr       */
+/*   Updated: 2022/02/24 15:32:57 by mkardes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	ft_continue(va_list arg, int c)
+int	ft_bas_say(unsigned int c)
 {
-	if (c == 6)
-		return (hex_print(va_arg(arg, unsigned int)));
-	if (c == 7)
-		return (hex_print_capital(va_arg(arg, unsigned int)));
-	if (c == 8)
+	int	i;
+
+	i = 0;
+	while (c >= 10)
 	{
-		ft_putchar_fd('%', 1);
-		return (1);
+		c = c / 10;
+		i++;
 	}
-	return (0);
+	return (i + 1);
 }
 
-int	ft_chooser(va_list arg, int c)
+int	array_print(char *str)
+{
+	int	len;
+
+	len = 0;
+	if (!str)
+		return (array_print("(null)"));
+	while (str[len])
+	{
+		ft_putchar_fd(str[len], 1);
+		len++;
+	}
+	return (len);
+}
+
+int	ft_uitoa(unsigned int a)
+{
+	int		len;
+	char	*str;
+
+	len = ft_bas_say(a);
+	str = (char *)malloc(sizeof(char) * len + 1);
+	str[len] = '\0';
+	while (len > 0)
+	{
+		str[len - 1] = a % 10 + 48;
+		a = a / 10;
+		len--;
+	}
+	len = array_print(str);
+	free(str);
+	return (len);
+}
+
+int	ft_strchecker(va_list arg, int g)
 {
 	char	*a;
 	int		len;
 
-	if (c == 1)
-	{
-		ft_putchar_fd(va_arg(arg, int), 1);
-		return (1);
-	}
-	if (c == 2)
-		return (array_print(va_arg(arg, char *)));
-	if (c == 3)
-		return (ptr_print(va_arg(arg, unsigned long)));
-	if (c == 4)
+	len = 0;
+	if (g == 'c')
+		len += ft_putchar_v2(va_arg(arg, int));
+	if (g == 's')
+		len += array_print(va_arg(arg, char *));
+	if (g == 'p')
+		len += ptr_print(va_arg(arg, unsigned long));
+	if (g == 'd' || g == 'i')
 	{
 		a = ft_itoa(va_arg(arg, int));
-		len = array_print(a);
+		len += array_print(a);
 		free(a);
-		return (len);
 	}
-	if (c == 5)
-		return (ft_uitoa(va_arg(arg, unsigned int)));
-	return (ft_continue(arg, c));
-}
-
-int	ft_strchecker(const char *str, int i)
-{
-	if (str[i] == 'c')
-		return (1);
-	if (str[i] == 's')
-		return (2);
-	if (str[i] == 'p')
-		return (3);
-	if (str[i] == 'd' || str[i] == 'i')
-		return (4);
-	if (str[i] == 'u')
-		return (5);
-	if (str[i] == 'x')
-		return (6);
-	if (str[i] == 'X')
-		return (7);
-	if (str[i] == '%')
-		return (8);
-	return (0);
+	if (g == 'u')
+		len += ft_uitoa(va_arg(arg, unsigned int));
+	if (g == 'x' || g == 'X')
+		len += hex_print(va_arg(arg, unsigned int), g);
+	if (g == '%')
+		len += ft_putchar_v2('%');
+	return (len);
 }
 
 int	ft_printf(const char *str, ...)
@@ -78,7 +91,6 @@ int	ft_printf(const char *str, ...)
 	va_list	arg;
 	int		len;
 	int		i;
-	int		c;
 
 	va_start(arg, str);
 	i = 0;
@@ -88,8 +100,7 @@ int	ft_printf(const char *str, ...)
 		if (str[i] == '%')
 		{
 			i++;
-			c = ft_strchecker(str, i);
-			len += ft_chooser(arg, c);
+			len += ft_strchecker(arg, str[i]);
 		}
 		else
 		{

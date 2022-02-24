@@ -6,39 +6,19 @@
 /*   By: mkardes <mkardes@student.42kocaeli.com.tr  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 11:06:32 by mkardes           #+#    #+#             */
-/*   Updated: 2022/02/22 11:20:47 by mkardes          ###   ########.fr       */
+/*   Updated: 2022/02/24 15:33:40 by mkardes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	hex_print(unsigned int n)
+int	ft_putchar_v2(char g)
 {
-	int				i;
-	int				i1;
-	int				len;
-	char			*a;
-	unsigned int	n1;
-
-	a = ft_strdup("0123456789abcdef");
-	i = 1;
-	n1 = n;
-	while (n1 >= 16 && i++)
-		n1 = n1 / 16;
-	len = i;
-	while (--i >= 0)
-	{
-		n1 = n;
-		i1 = i;
-		while (--i1 >= 0)
-			n1 = n1 / 16;
-		ft_putchar_fd(a[n1 % 16], 1);
-	}
-	free(a);
-	return (len);
+	write(1, &g, 1);
+	return (1);
 }
 
-int	hex_print_capital(unsigned int n)
+int	hex_print(unsigned int n, char c)
 {
 	int				i;
 	int				i1;
@@ -46,7 +26,10 @@ int	hex_print_capital(unsigned int n)
 	char			*a;
 	unsigned int	n1;
 
-	a = ft_strdup("0123456789ABCDEF");
+	if (c == 'X')
+		a = ft_strdup("0123456789ABCDEF");
+	else
+		a = ft_strdup("0123456789abcdef");
 	i = 1;
 	n1 = n;
 	while (n1 >= 16 && i++)
