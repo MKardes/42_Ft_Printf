@@ -6,7 +6,7 @@
 /*   By: mkardes <mkardes@student.42kocaeli.com.tr  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 11:06:49 by mkardes           #+#    #+#             */
-/*   Updated: 2022/02/24 15:32:57 by mkardes          ###   ########.fr       */
+/*   Updated: 2022/02/24 15:50:30 by mkardes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,7 @@ int	array_print(char *str)
 	if (!str)
 		return (array_print("(null)"));
 	while (str[len])
-	{
-		ft_putchar_fd(str[len], 1);
-		len++;
-	}
+		len += ft_putchar_v2(str[len]);
 	return (len);
 }
 

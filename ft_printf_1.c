@@ -6,7 +6,7 @@
 /*   By: mkardes <mkardes@student.42kocaeli.com.tr  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 11:06:32 by mkardes           #+#    #+#             */
-/*   Updated: 2022/02/24 15:33:40 by mkardes          ###   ########.fr       */
+/*   Updated: 2022/02/24 15:52:59 by mkardes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	hex_print(unsigned int n, char c)
 		i1 = i;
 		while (--i1 >= 0)
 			n1 = n1 / 16;
-		ft_putchar_fd(a[n1 % 16], 1);
+		ft_putchar_v2(a[n1 % 16]);
 	}
 	free(a);
 	return (len);
@@ -58,7 +58,7 @@ int	ptr_printer(unsigned long n)
 		ptr_printer(n % 16);
 	}
 	else
-		ft_putchar_fd(a[n], 1);
+		ft_putchar_v2(a[n]);
 	free(a);
 	return (0);
 }
@@ -68,8 +68,8 @@ int	ptr_print(unsigned long n)
 	int	i;
 
 	i = 1;
-	ft_putchar_fd('0', 1);
-	ft_putchar_fd('x', 1);
+	ft_putchar_v2('0');
+	ft_putchar_v2('x');
 	ptr_printer(n);
 	while (n >= 16)
 	{
