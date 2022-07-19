@@ -1,33 +1,34 @@
-NAME		= libftprintf.a
-INCLUDE		= include
-LIBFT		= libft
-CC			= gcc
-CFLAGS		= -Wall -Werror -Wextra
-RM			= rm -f
-AR			= ar rcs
+NAME = libmlx.a
+LIBX = mlx/libmlx.a
+PRINT = Others/ft_printf/libftprintf.a
+MINILIB = mlx
+PRINTF = Others/ft_printf
+FLAGS = -Wall -Wextra -Werror
 
-SRC	= $(wildcard *.c)
-OBJ = $(SRC:.c=.o)
+all: $(NAME) 
+	gcc $(FLAGS) $(NAME) $(PRINT) *.c -Lmlx -lmlx -framework OpenGL -framework AppKit -o fractol
+	@echo "Mission FAİLED SUCCESSFULLY"
 
-all:		$(NAME)
+$(NAME): $(LIBX) $(PRINT)
+	cp $(LIBX) .
+	rm -rf $(LIBX) libftprintf.a
 
-$(NAME):	$(OBJ)
-			make -C $(LIBFT)
-			cp libft/libft.a .
-			mv libft.a $(NAME)
-			$(AR) $(NAME) $(OBJ)
+$(LIBX): $(MINILIB)
+	make -C $(MINILIB)
 
-%.o: %.c
-			@$(CC) $(CFLAGS) -c $< -o $@
+$(PRINT): $(PRINTF)
+	make -C $(PRINTF)
+
+bonus:
 
 clean:
-			rm -f *.o
-			make clean -C $(LIBFT)
+	make clean -C $(PRINTF)
+	make clean -C $(MINILIB)
 
-fclean:		clean
-			@$(RM) -f $(NAME)
-			@$(RM) -f $(LIBFT)/libft.a
+fclean: clean
+	make fclean -C $(PRINTF)
+	rm -rf fractol *.a
 
-re:			fclean all
+re: fclean all
 
-.PHONY:		all clean fclean re
+.PHONY: clean re fclean all
